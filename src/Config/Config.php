@@ -5,7 +5,7 @@ class Config
 {
     private static $config = [
         // code chat br
-        'cBaseUrl' => 'http://95.111.244.134:8080',
+        'cBaseUrl' => 'https://api.codechat.dev',
         'cApiKey' => 'sua-chave-api-aqui',
         // salman whatsapp api nodejs 
         'sBaseUrl' => 'https://api.codechat.dev',
