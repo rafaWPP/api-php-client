@@ -1,4 +1,4 @@
-```<?php
+<?php
 use WebTech\WhatsAppApi\CodeChat;
 
 // Instanciando a classe CodeChat
