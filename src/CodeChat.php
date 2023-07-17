@@ -79,6 +79,40 @@ class CodeChat
         return $this->httpClient->post('/message/sendMedia/' . $this->instanceName, $data);
     }
 
+    public function sendButtons($number, $title, $description, $footerText, $buttons, $media, $delay = 0)
+    {
+        $data = [
+            'number' => $number,
+            'options' => ['delay' => $delay],
+            'buttonMessage' => [
+                'title' => $title,
+                'description' => $description,
+                'footerText' => $footerText,
+                'buttons' => $buttons,
+                'mediaMessage' => $this->getMediaMessage('', $media)
+            ]
+        ];
+
+        return $this->httpClient->post('/message/sendButtons/' . $this->instanceName, $data);
+    }
+
+    public function sendList($number, $title, $description, $buttonText, $footerText, $sections, $delay = 0)
+    {
+        $data = [
+            'number' => $number,
+            'listMessage' => [
+                'title' => $title,
+                'description' => $description,
+                'buttonText' => $buttonText,
+                'footerText' => $footerText,
+                'sections' => $sections
+            ],
+            'options' => ['delay' => $delay]
+        ];
+
+        return $this->httpClient->post('/message/sendList/' . $this->instanceName, $data);
+    }
+
     private function getMediaMessage($caption, $media)
     {
         $extension = pathinfo($media, PATHINFO_EXTENSION);
