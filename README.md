@@ -37,7 +37,7 @@ $response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/
 $response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/caminho/para/arquivo.jpg',120);
 
 echo $response;
-?>
+?>```
 
 Salman
 
