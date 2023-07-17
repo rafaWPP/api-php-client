@@ -1,19 +1,25 @@
 <?php
+
 namespace WebTech\WhatsAppApi\Config;
 
 class Config
 {
     private static $config = [
         // code chat br
-        'cBaseUrl' => 'https://api.codechat.dev',
-        'cApiKey' => 'sua-chave-api-aqui',
+        'cBaseUrl' => null,
+        'cApiKey' => null,
         // salman whatsapp api nodejs 
-        'sBaseUrl' => 'https://api.codechat.dev',
-        'sBearerToken' => 'seu-token-bearer-aqui',
-        // wppconnnect
-        'wBaseUrl' => 'https://api.codechat.dev',
-        'wBearerToken' => 'seu-token-bearer-aqui'
+        'sBaseUrl' => null,
+        'sBearerToken' => null,
+        // wppconnect
+        'wBaseUrl' => null,
+        'wBearerToken' => null
     ];
+
+    public function __construct(array $config = [])
+    {
+        self::$config = array_merge(self::$config, $config);
+    }
 
     public static function get($key)
     {

@@ -15,6 +15,9 @@ class CodeChat
     {
         $baseUrl = Config::get('cBaseUrl');
         $apiKey = Config::get('cApiKey');
+        if (!$baseUrl || !$apiKey) {
+            throw new Exception("As configurações devem ser fornecidas para usar o CodeChat.");
+        }
         $this->httpClient = new HttpClient($baseUrl, $apiKey);
         $this->instanceName = $instanceName;
     }
