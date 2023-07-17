@@ -1,5 +1,12 @@
 ```<?php
 use WebTech\WhatsAppApi\CodeChat;
+use WebTech\WhatsAppApi\Config\Config;
+
+$config = new Config([
+    'cBaseUrl' => 'http:api:por',
+    'cApiKey' => 'sua-chave-api-aqui',
+    // Restante das configurações
+]);
 
 // Instanciando a classe CodeChat
 $codeChat = new CodeChat("minha_instancia");
