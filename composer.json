@@ -1,6 +1,6 @@
 {
     "name": "webtech/api-php-client",
-    "description": "Um simples cliente PHP que proporciona acesso fácil aos endpoints do Code Chat BR.",
+    "description": "Um simples cliente PHP que proporciona acesso fácil aos endpoints do Code Chat Salman Wpp.",
     "type": "library",
     "license": "Apache-2.0",
     "keywords": [
