@@ -22,7 +22,7 @@ class Salman
             throw new Exception("As configurações devem ser fornecidas para usar o Salman.");
         }
 
-        $this->httpClient = new HttpClient($baseUrl, $bearerToken);
+        $this->httpClient = new HttpClient($baseUrl, 'Authorization: ' . $bearerToken);
     }
 
     public function create()
@@ -84,38 +84,28 @@ class Salman
         return $this->httpClient->post('/message/mediaurl?key=' . $this->key, $data);
     }
 
-    public function sendButtons($number, $btndata)
-    {
-        return $this->httpClient->post('/message/button?key=' . $this->key, $btndata);
-    }
-
-    public function sendMediaButtons($number, $btndata)
-    {
-        return $this->httpClient->post('/message/MediaButton?key=' . $this->key, $btndata);
-    }
-
-    public function sendList($number, $msgdata)
-    {
-        return $this->httpClient->post('/message/list?key=' . $this->key, $msgdata);
-    }
-
     private function getMediaMessage($caption, $media)
     {
         $extension = pathinfo($media, PATHINFO_EXTENSION);
-        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif','webp'];
         $documentExtensions = ['pdf', 'doc', 'docx'];
         $videoExtensions = ['mp4', 'avi', 'mov'];
         $audioExtensions = ['mp3', 'wav'];
         $mediatype = '';
+        $mimetype = '';
 
         if (in_array($extension, $imageExtensions)) {
             $mediatype = 'image';
+            $mimetype = 'image/' . $extension;
         } elseif (in_array($extension, $documentExtensions)) {
             $mediatype = 'document';
+            $mimetype = 'application/' . $extension;
         } elseif (in_array($extension, $videoExtensions)) {
             $mediatype = 'video';
+            $mimetype = 'video/' . $extension;
         } elseif (in_array($extension, $audioExtensions)) {
             $mediatype = 'audio';
+            $mimetype = 'audio/' . $extension;
         } else {
             throw new Exception("Tipo de arquivo inválido");
         }
@@ -124,7 +114,8 @@ class Salman
             'mediatype' => $mediatype,
             'fileName' => $media,
             'caption' => $caption,
-            'media' => $media
+            'media' => $media,
+            'mimetype' => $mimetype
         ];
     }
 }

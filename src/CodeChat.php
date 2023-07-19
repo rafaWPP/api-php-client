@@ -10,51 +10,72 @@ class CodeChat
 {
     protected $httpClient;
     protected $instanceName;
+    protected $apiKey;
+    protected $baseUrl;
 
     public function __construct($instanceName)
     {
         $baseUrl = Config::get('cBaseUrl');
         $apiKey = Config::get('cApiKey');
-        if (!$baseUrl || !$apiKey) {
-            throw new Exception("As configurações devem ser fornecidas para usar o CodeChat.");
-        }
+    
         $this->httpClient = new HttpClient($baseUrl, $apiKey);
         $this->instanceName = $instanceName;
     }
 
     public function create()
     {
-        return $this->httpClient->post('/instance/create', ['instanceName' => $this->instanceName]);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->post('/instance/create', ['instanceName' => $this->instanceName]);
     }
 
     public function connect()
     {
-        return $this->httpClient->get('/instance/connect/' . $this->instanceName);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->get('/instance/connect/' . $this->instanceName);
     }
 
     public function delete()
     {
-        return $this->httpClient->delete('/instance/delete/' . $this->instanceName);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->delete('/instance/delete/' . $this->instanceName);
     }
     
     public function logout()
     {
-        return $this->httpClient->delete('/instance/logout/' . $this->instanceName);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->delete('/instance/logout/' . $this->instanceName);
     }
     
     public function fetch()
     {
-        return $this->httpClient->get('/instance/fetchInstances?instanceName=' . $this->instanceName);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->get('/instance/fetchInstances?instanceName=' . $this->instanceName);
     }
     
     public function fetchAll()
     {
-        return $this->httpClient->get('/instance/fetchInstances');
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->get('/instance/fetchInstances');
     }
     
     public function status()
     {
-        return $this->httpClient->get('/instance/connectionState/' . $this->instanceName);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->get('/instance/connectionState/' . $this->instanceName);
     }
 
     public function sendText($number, $text, $delay = 0)
@@ -65,7 +86,10 @@ class CodeChat
             'textMessage' => ['text' => $text]
         ];
 
-        return $this->httpClient->post('/message/sendText/' . $this->instanceName, $data);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->post('/message/sendText/' . $this->instanceName, $data);
     }
 
     public function sendMedia($number, $caption, $media, $delay = 0)
@@ -76,7 +100,10 @@ class CodeChat
             'mediaMessage' => $this->getMediaMessage($caption, $media)
         ];
 
-        return $this->httpClient->post('/message/sendMedia/' . $this->instanceName, $data);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->post('/message/sendMedia/' . $this->instanceName, $data);
     }
 
     public function sendButtons($number, $title, $description, $footerText, $buttons, $media, $delay = 0)
@@ -93,7 +120,10 @@ class CodeChat
             ]
         ];
 
-        return $this->httpClient->post('/message/sendButtons/' . $this->instanceName, $data);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->post('/message/sendButtons/' . $this->instanceName, $data);
     }
 
     public function sendList($number, $title, $description, $buttonText, $footerText, $sections, $delay = 0)
@@ -110,13 +140,16 @@ class CodeChat
             'options' => ['delay' => $delay]
         ];
 
-        return $this->httpClient->post('/message/sendList/' . $this->instanceName, $data);
+        return $this->httpClient->headers([
+            'Content-Type: application/json',
+            'apikey:' . $this->apiKey
+        ])->post('/message/sendList/' . $this->instanceName, $data);
     }
 
     private function getMediaMessage($caption, $media)
     {
         $extension = pathinfo($media, PATHINFO_EXTENSION);
-        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $imageExtensions = ['jpg', 'jpeg', 'png', 'gif','webp'];
         $documentExtensions = ['pdf', 'doc', 'docx'];
         $videoExtensions = ['mp4', 'avi', 'mov'];
         $audioExtensions = ['mp3', 'wav'];
@@ -136,10 +169,9 @@ class CodeChat
 
         return [
             'mediatype' => $mediatype,
-            'fileName' => $media,
+            'fileName' => $mediatype,
             'caption' => $caption,
             'media' => $media
         ];
     }
 }
-?>

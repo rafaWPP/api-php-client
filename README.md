@@ -1,82 +1,177 @@
-CodeChatBR
-
+CodeChat
 ```<?php
+<?php
+
+// Inclua o arquivo da classe CodeChat
 use WebTech\WhatsAppApi\CodeChat;
+
+//Configuração
 use WebTech\WhatsAppApi\Config\Config;
 
 $config = new Config([
-    'cBaseUrl' => 'http:api:por',
-    'cApiKey' => 'sua-chave-api-aqui',
-    // Restante das configurações
+    // codechat
+    'cBaseUrl' => 'url',
+    'cApiKey' => 'key',
+    //salman
+    'sBaseUrl' => 'url',
+    'sBearerToken' => 'token',
+    //wppconnect
+    'wBaseUrl' => 'url',
+    'wBearerToken' => 'token',
 ]);
 
-// Instanciando a classe CodeChat
-$codeChat = new CodeChat("minha_instancia");
+// Crie uma instância do CodeChat
+$instanceName = 'minha_instancia';
+$codeChat = new CodeChat($instanceName);
 
-$response = $codeChat->create();
-echo $response;
+try {
+    // Crie uma nova instância
+    $response = $codeChat->create();
+    echo "Instância criada com sucesso.\n";
 
-$response = $codeChat->connect();
-echo $response;
+    // Conecte-se à instância
+    $response = $codeChat->connect();
+    echo "Conexão estabelecida com sucesso.\n";
 
-$response = $codeChat->status();
-echo $response;
+    // Envie uma mensagem de texto
+    $number = '551234567890';
+    $text = 'Olá, mundo!';
+    $response = $codeChat->sendText($number, $text);
+    echo "Mensagem de texto enviada com sucesso.\n";
 
-// Enviar mensagem sem delei
-$response = $codeChat->sendText('1234567890', 'Olá, este é um teste');
+    // Envie uma mídia
+    $caption = 'Imagem legal';
+    $media = '/caminho/para/imagem.jpg';
+    $response = $codeChat->sendMedia($number, $caption, $media);
+    echo "Mídia enviada com sucesso.\n";
 
-// Enviar mensagem com delei
-$response = $codeChat->sendText('1234567890', 'Olá, este é um teste',120);
+    // Obtenha o estado da conexão
+    $response = $codeChat->status();
+    echo "Estado da conexão: " . $response . "\n";
 
-echo $response;
+    // Exclua a instância
+    $response = $codeChat->delete();
+    echo "Instância excluída com sucesso.\n";
+} catch (Exception $e) {
+    echo "Ocorreu um erro: " . $e->getMessage() . "\n";
+}
 
-// Enviar midia sem delei
-$response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/caminho/para/arquivo.jpg');
+//Salman
+<?php
 
-// Enviar midia sem delei
-$response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/caminho/para/arquivo.jpg',120);
+// Inclua o arquivo da classe Salman
+require_once 'Salman.php';
 
-echo $response;
-?>```
+use WebTech\WhatsAppApi\Salman;
 
-Salman
+// Crie uma instância do Salman
+$key = 'chave_de_acesso_aqui';
+$salman = new Salman($key);
 
-```<?php
-use WebTech\WhatsAppApi\CodeChat;
-use WebTech\WhatsAppApi\Config\Config;
+try {
+    // Crie uma nova instância
+    $response = $salman->create();
+    echo "Instância criada com sucesso.\n";
 
-$config = new Config([
-    'cBaseUrl' => 'http:api:por',
-    'cApiKey' => 'sua-chave-api-aqui',
-    // Restante das configurações
-]);
+    // Conecte-se à instância
+    $response = $salman->connect();
+    echo "Conexão estabelecida com sucesso.\n";
 
-// Instanciando a classe CodeChat
-$codeChat = new CodeChat("minha_instancia");
+    // Envie uma mensagem de texto
+    $number = '551234567890';
+    $message = 'Olá, mundo!';
+    $response = $salman->sendText($number, $message);
+    echo "Mensagem de texto enviada com sucesso.\n";
 
-$response = $codeChat->create();
-echo $response;
+    // Envie uma mídia
+    $caption = 'Imagem legal';
+    $media = '/caminho/para/imagem.jpg';
+    $response = $salman->sendMedia($number, $caption, $media);
+    echo "Mídia enviada com sucesso.\n";
 
-$response = $codeChat->connect();
-echo $response;
+    // Obtenha o estado da conexão
+    $response = $salman->status();
+    echo "Estado da conexão: " . $response . "\n";
 
-$response = $codeChat->status();
-echo $response;
+    // Restaure todas as instâncias
+    $response = $salman->restoreAll();
+    echo "Todas as instâncias restauradas.\n";
 
-// Enviar mensagem sem delei
-$response = $codeChat->sendText('1234567890', 'Olá, este é um teste');
+    // Exclua a instância
+    $response = $salman->delete();
+    echo "Instância excluída com sucesso.\n";
+} catch (Exception $e) {
+    echo "Ocorreu um erro: " . $e->getMessage() . "\n";
+}
 
-// Enviar mensagem com delei
-$response = $codeChat->sendText('1234567890', 'Olá, este é um teste',120);
+//WPPconnect
+<?php
 
-echo $response;
+// Inclua o arquivo da classe Wpp
+require_once 'Wpp.php';
 
-// Enviar midia sem delei
-$response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/caminho/para/arquivo.jpg');
+use WebTech\WhatsAppApi\Wpp;
 
-// Enviar midia sem delei
-$response = $codeChat->sendMedia('1234567890', 'Este é um arquivo de teste', '/caminho/para/arquivo.jpg',120);
+// Crie uma instância do Wpp
+$instanceName = 'nome_da_instancia';
+$wpp = new Wpp($instanceName);
 
-echo $response;
-?>
+try {
+    // Obtenha um novo token
+    $tokenResponse = $wpp->newToken();
+    $token = $tokenResponse['data']['token'];
+
+    // Conecte-se à instância com o token
+    $connectResponse = $wpp->connect($token);
+    echo "Conexão estabelecida com sucesso.\n";
+
+    // Obtenha o código QR e a URL de sessão
+    $qrcodeResponse = $wpp->qrcodeSession($token);
+    $qrcode = $qrcodeResponse['data']['qrCode'];
+    $sessionUrl = $qrcodeResponse['data']['sessionUrl'];
+    echo "Código QR: " . $qrcode . "\n";
+    echo "URL da sessão: " . $sessionUrl . "\n";
+
+    // Verifique se o código QR foi atualizado
+    $qrcodeUpdateResponse = $wpp->qrcodeUpdate($token);
+    $isQrcodeUpdated = $qrcodeUpdateResponse['data']['isQrcodeUpdated'];
+    echo "O código QR foi atualizado? " . ($isQrcodeUpdated ? "Sim" : "Não") . "\n";
+
+    // Obtenha o status da conexão
+    $statusResponse = $wpp->status($token);
+    $connectionStatus = $statusResponse['data']['connectionStatus'];
+    echo "Status da conexão: " . $connectionStatus . "\n";
+
+    // Envie uma mensagem de texto
+    $phone = '551234567890';
+    $message = 'Olá, mundo!';
+    $sendTextResponse = $wpp->sendText($token, $phone, $message);
+    echo "Mensagem de texto enviada com sucesso.\n";
+
+    // Envie um arquivo
+    $fileLink = '/caminho/para/arquivo.pdf';
+    $caption = 'Arquivo PDF';
+    $sendFileResponse = $wpp->sendMedia($token, $phone, $fileLink, $caption);
+    echo "Arquivo enviado com sucesso.\n";
+
+    // Envie um link com visualização
+    $link = 'https://www.example.com';
+    $linkCaption = 'Link para o site';
+    $sendLinkPreviewResponse = $wpp->sendLinkPreview($token, $phone, $link, $linkCaption);
+    echo "Link com visualização enviado com sucesso.\n";
+
+    // Verifique o status de um número
+    $number = '551234567890';
+    $numberCheckResponse = $wpp->numberCheck($token, $number);
+    $numberStatus = $numberCheckResponse['data']['status'];
+    echo "Status do número " . $number . ": " . $numberStatus . "\n";
+
+    // Encerre a sessão
+    $logoutResponse = $wpp->logout($token);
+    echo "Sessão encerrada com sucesso.\n";
+} catch (Exception $e) {
+    echo "Ocorreu um erro: " . $e->getMessage() . "\n";
+}
+
+
 

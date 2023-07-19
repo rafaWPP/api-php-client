@@ -5,24 +5,38 @@ class HttpClient
 {
     private $baseUrl;
     private $apiKey;
+    private $nextRequestHeaders;
 
     public function __construct($baseUrl, $apiKey)
     {
         $this->baseUrl = $baseUrl;
         $this->apiKey = $apiKey;
+        $this->nextRequestHeaders = [];
+    }
+
+    public function headers($headers)
+    {
+        $this->nextRequestHeaders = $headers;
+        return $this;
     }
 
     private function executeCurl($url, $method = 'GET', $body = null)
     {
         $ch = curl_init();
 
+        $defaultHeaders = [
+            'Content-Type: application/json',
+            'apikey: ' . $this->apiKey,
+        ];
+
+        $headers = array_merge($defaultHeaders, $this->nextRequestHeaders);
+        // Limpa os cabeçalhos para a próxima requisição.
+        $this->nextRequestHeaders = [];
+
         curl_setopt($ch, CURLOPT_URL, $this->baseUrl . $url);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'apikey: ' . $this->apiKey,
-            'Content-Type: application/json'
-        ]);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         if ($body) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
