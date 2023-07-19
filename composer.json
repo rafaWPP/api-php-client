@@ -1,0 +1,42 @@
+{
+    "name": "webtech/api-php-client",
+    "description": "Um simples cliente PHP que proporciona acesso fácil aos endpoints do Code Chat BR.",
+    "type": "library",
+    "license": "Apache-2.0",
+    "keywords": [
+        "php",
+        "rest client",
+        "webtech"
+    ],
+    "homepage": "https://github.com/rafaWPP/webtech-codechat-php-client",
+    "authors": [
+        {
+            "name": "Rafael WebTech"
+        }
+    ],
+    "support": {
+        "email": "suporte@seusite.com",
+        "issues": "https://github.com/wppconnect-team/wppconnect-php-client/issues"
+    },
+    "require": {
+        "php": ">=7.3",
+        "squizlabs/php_codesniffer": "3.6.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "WebTech\\WhatsAppApi\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "minimum-stability": "stable"
+}
